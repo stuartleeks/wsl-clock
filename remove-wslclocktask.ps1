@@ -1,0 +1,1 @@
+schtasks.exe /Delete /TN wsl-clock /F
