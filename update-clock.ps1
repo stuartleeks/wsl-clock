@@ -13,7 +13,7 @@ $runningDistroCount = wsl --list --running --quiet |
 
 if ($runningDistroCount -eq 0){
     Log "No Distros - quitting"
-    exit 1
+    exit 0
 }
 
 $originalDate=wsl sh -c "date -Iseconds"
