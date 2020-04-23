@@ -6,7 +6,7 @@ This repo has a workaround that creates a scheduled task that is triggered by Wi
 
 ## Setup
 
-To set up the scheduled task, run `add-wslclocktask.ps1`.
+To set up the scheduled task, clone the repo and run `add-wslclocktask.ps1`.
 
 ## Cleanup
 
