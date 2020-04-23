@@ -1,5 +1,7 @@
 # wsl-clock
 
+**IMPORTANT: This is not an official solution and whilst it worked on my machine this is an unsupported workaround :-)**
+
 There is an issue with WSL where the clock in WSl isn't updated when the host resumes from sleep/hibernate. E.g. [this issue](https://github.com/microsoft/WSL/issues/4245)
 
 This repo has a workaround that creates a scheduled task that is triggered by Windows Events for resuming from sleep/hibernation. When the scheduled task executes it resets the clock in the WSL VM.
