@@ -6,6 +6,8 @@ There is an issue with WSL where the clock in WSl isn't updated when the host re
 
 This repo has a workaround that creates a scheduled task that is triggered by Windows Events for resuming from sleep/hibernation. When the scheduled task executes it resets the clock in the WSL VM.
 
+For the background to this repo, see [this blog post](https://stuartleeks.com/posts/fixing-clock-skew-with-wsl-2/)
+
 ## Setup
 
 To set up the scheduled task, clone the repo and run `add-wslclocktask.ps1`.
