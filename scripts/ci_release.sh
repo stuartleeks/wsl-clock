@@ -1,5 +1,7 @@
 set -e
 
+echo "ci_release - starting..."
+
 # Fail if build number not set
 if [ -z "$BUILD_NUMBER" ]; then
     echo "Env var 'BUILD_NUMBER' must be set for this script to work correctly"
