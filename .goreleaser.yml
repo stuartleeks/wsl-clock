@@ -17,6 +17,11 @@ archives:
     format_overrides:
       - goos: windows
         format: zip
+    files:
+      - README.md
+      - LICENSE.md
+      - add-wslclocktask.ps1
+      - remove-wslclocktask.ps1
 
 changelog:
   sort: asc
