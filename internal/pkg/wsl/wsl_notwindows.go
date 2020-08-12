@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-func GetRunningDistros() ([]string, error) {
+func GetRunningV2Distros() ([]string, error) {
 	return []string{}, fmt.Errorf("Not implemented")
 }
 func GetWslTime() (time.Time, error) {

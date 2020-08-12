@@ -11,14 +11,26 @@ import (
 	"time"
 )
 
-func GetRunningDistros() ([]string, error) {
+func GetRunningV2Distros() ([]string, error) {
 	// TODO - consider changing this to us verbose listing and test for any running v2 instances
 	// and then use that to determine an instance to run the remaining WSL commands in
-	output, err := execCmdToLines("wsl.exe", "--list", "--running", "--quiet")
+	output, err := execCmd("wsl.exe", "--list", "--verbose")
 	if err != nil {
 		return []string{}, err
 	}
-	return output, nil
+
+	distros, err := parseDistroOutput(string(output))
+	if err != nil {
+		return []string{}, err
+	}
+
+	v2Distros := []string{}
+	for _, distro := range distros {
+		if distro.Version == "2" && distro.State == "Running" {
+			v2Distros = append(v2Distros, distro.Name)
+		}
+	}
+	return v2Distros, nil
 }
 func GetWslTime() (time.Time, error) {
 	output, err := execCmdToLines("wsl.exe", "sh", "-c", "date -Iseconds")
@@ -42,7 +54,7 @@ func ResetWslClock() error {
 	return nil
 }
 
-func execCmdToLines(program string, arg ...string) ([]string, error) {
+func execCmd(program string, arg ...string) ([]byte, error) {
 	cmd := exec.Command(program, arg...)
 
 	const CREATE_NO_WINDOW = 0x08000000
@@ -53,7 +65,7 @@ func execCmdToLines(program string, arg ...string) ([]string, error) {
 
 	outputTemp, err := cmd.Output()
 	if err != nil {
-		return []string{}, err
+		return []byte{}, err
 	}
 
 	output := outputTemp
@@ -62,6 +74,16 @@ func execCmdToLines(program string, arg ...string) ([]string, error) {
 		for i := 0; i < len(output); i++ {
 			output[i] = outputTemp[2*i]
 		}
+	}
+
+	return output, nil
+}
+
+func execCmdToLines(program string, arg ...string) ([]string, error) {
+
+	output, err := execCmd(program, arg...)
+	if err != nil {
+		return []string{}, err
 	}
 
 	reader := bytes.NewReader(output)

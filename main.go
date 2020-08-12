@@ -44,7 +44,7 @@ func execute() error {
 	logging.AddMessage("*** Date      : %s", date)
 	logging.AddMessage("*** Go version: %s", goversion)
 
-	runningDistros, err := wsl.GetRunningDistros()
+	runningDistros, err := wsl.GetRunningV2Distros()
 	if err != nil {
 		return fmt.Errorf("Failed to get running distros: %s", err)
 	}
