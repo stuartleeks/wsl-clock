@@ -7,12 +7,13 @@ import (
 	"math"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"time"
 )
 
 var message string
 
-const toleratedTimeDiffInSeconds float64 = 5 // allow for time executing the commands between comparisons
+const toleratedTimeDiffInSeconds float64 = 30 // allow for time executing the commands between comparisons
 
 func main() {
 	err := execute()
@@ -28,8 +29,8 @@ func main() {
 
 func execute() error {
 	// TODO - add version
-	addMessage(`********************************
-*** Update WSL clock starting...`)
+	addMessage("********************************")
+	addMessage("*** Update WSL clock starting...")
 
 	runningDistros, err := getRunningDistros()
 	if err != nil {
@@ -50,7 +51,7 @@ func execute() error {
 	absDiffSeconds := math.Abs(diff.Seconds())
 
 	if absDiffSeconds < toleratedTimeDiffInSeconds {
-		addMessage("Time within tolerance - quitting")
+		addMessage("Time diff (%0.fs) within tolerance (%0.fs) - quitting", absDiffSeconds, toleratedTimeDiffInSeconds)
 		return nil
 	}
 
@@ -73,11 +74,24 @@ func addMessage(newMessage string, a ...interface{}) {
 	if message != "" {
 		message += "\n"
 	}
-	message += fmt.Sprintf(newMessage, a...)
+	timestamp := time.Now().UTC().Format("2006-01-02 15:04:05 ")
+	message += timestamp + fmt.Sprintf(newMessage, a...)
 }
 func writeLog() {
-	// TODO - write to file!
-	fmt.Println(message)
+	userProfile := os.Getenv("USERPROFILE")
+	logPath := filepath.Join(userProfile, ".wsl-clock.log")
+
+	file, err := os.OpenFile(logPath, os.O_APPEND|os.O_WRONLY|os.O_CREATE, os.ModeAppend)
+	if err != nil {
+		fmt.Printf("Error opening log file %q: %s", logPath, err)
+		panic(err)
+	}
+	defer file.Close()
+	_, err = file.WriteString(message + "\n")
+	if err != nil {
+		fmt.Printf("Error writing to log file %q: %s", logPath, err)
+		panic(err)
+	}
 }
 
 func getRunningDistros() ([]string, error) {
