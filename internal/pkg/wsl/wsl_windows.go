@@ -32,8 +32,8 @@ func GetRunningV2Distros() ([]string, error) {
 	}
 	return v2Distros, nil
 }
-func GetWslTime() (time.Time, error) {
-	output, err := execCmdToLines("wsl.exe", "sh", "-c", "date -Iseconds")
+func GetWslTime(distroName string) (time.Time, error) {
+	output, err := execCmdToLines("wsl.exe", "-d", distroName, "sh", "-c", "date -Iseconds")
 	if err != nil {
 		return time.Time{}, fmt.Errorf("Failed to call WSL to get current time: %s", err)
 	}
@@ -46,8 +46,8 @@ func GetWslTime() (time.Time, error) {
 
 	return timeValue, nil
 }
-func ResetWslClock() error {
-	_, err := execCmdToLines("wsl.exe", "-u", "root", "sh", "-c", "hwclock -s")
+func ResetWslClock(distroName string) error {
+	_, err := execCmdToLines("wsl.exe", "-d", distroName, "-u", "root", "sh", "-c", "hwclock -s")
 	if err != nil {
 		return fmt.Errorf("Failed to call WSL to reset clock: %s", err)
 	}

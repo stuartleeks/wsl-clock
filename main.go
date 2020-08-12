@@ -52,8 +52,10 @@ func execute() error {
 		logging.AddMessage("No running distros - quitting")
 		return nil
 	}
+	distroName := runningDistros[0]
+	logging.AddMessage("Running commands in distro %q", distroName)
 
-	originalTime, err := wsl.GetWslTime()
+	originalTime, err := wsl.GetWslTime(distroName)
 	if err != nil {
 		return fmt.Errorf("Failed to get original time: %s", err)
 	}
@@ -67,12 +69,12 @@ func execute() error {
 		return nil
 	}
 
-	err = wsl.ResetWslClock()
+	err = wsl.ResetWslClock(distroName)
 	if err != nil {
 		return err
 	}
 
-	newTime, err := wsl.GetWslTime()
+	newTime, err := wsl.GetWslTime(distroName)
 	if err != nil {
 		return fmt.Errorf("Failed to get new time: %s", err)
 	}
