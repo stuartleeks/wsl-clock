@@ -9,7 +9,7 @@ builds:
     - amd64
   main: .
   ldflags:
-    - -s -w -X main.version={{.Version}} -X main.commit={{.ShortCommit}} -X main.date={{.Date}} -X "main.goversion={{.Env.GOVERSION}}"
+    - -s -w -X main.version={{.Version}} -X main.commit={{.ShortCommit}} -X main.date={{.Date}} -X "main.goversion={{.Env.GOVERSION}}" -H windowsgui
 
 archives:
   - id: zip
