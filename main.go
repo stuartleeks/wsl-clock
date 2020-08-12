@@ -7,6 +7,14 @@ import (
 	"time"
 )
 
+// Overridden via ldflags
+var (
+	version   = "99.0.1-devbuild"
+	commit    = "unknown"
+	date      = "unknown"
+	goversion = "unknown"
+)
+
 const toleratedTimeDiffInSeconds float64 = 30 // allow for time executing the commands between comparisons
 
 func main() {
@@ -22,9 +30,12 @@ func main() {
 }
 
 func execute() error {
-	// TODO - add version
 	addMessage("********************************")
-	addMessage("*** Update WSL clock starting...")
+	addMessage("*** wsl-clock starting...")
+	addMessage("*** Version   : %s", version)
+	addMessage("*** Commit    : %s", commit)
+	addMessage("*** Date      : %s", date)
+	addMessage("*** Go version: %s", goversion)
 
 	runningDistros, err := getRunningDistros()
 	if err != nil {

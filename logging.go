@@ -20,7 +20,7 @@ func writeLog() {
 	userProfile := os.Getenv("USERPROFILE")
 	logPath := filepath.Join(userProfile, ".wsl-clock.log")
 
-	file, err := os.OpenFile(logPath, os.O_APPEND|os.O_WRONLY|os.O_CREATE, os.ModeAppend)
+	file, err := os.OpenFile(logPath, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0666)
 	if err != nil {
 		fmt.Printf("Error opening log file %q: %s", logPath, err)
 		panic(err)
