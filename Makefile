@@ -1,8 +1,8 @@
 build:
-	go build .
+	 GOOS=windows go build .
 
 lint: build
-	golangci-lint run
+	 GOOS=windows golangci-lint run
 
 devcontainer:
 	docker build -f ./.devcontainer/Dockerfile ./.devcontainer -t wsl-clock
@@ -24,4 +24,4 @@ endif
 
 
 test:
-	go test -v ./...
+	 GOOS=windows go test -v ./...

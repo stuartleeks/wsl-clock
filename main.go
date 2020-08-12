@@ -5,7 +5,14 @@ import (
 	"math"
 	"os"
 	"time"
+
+	"github.com/stuartleeks/wsl-clock/internal/pkg/logging"
+	"github.com/stuartleeks/wsl-clock/internal/pkg/wsl"
 )
+
+// TODO
+// - allow clock tolerance to be specified as an arg
+// - allow max log size to be specified as an arg
 
 // Overridden via ldflags
 var (
@@ -20,9 +27,9 @@ const toleratedTimeDiffInSeconds float64 = 30 // allow for time executing the co
 func main() {
 	err := execute()
 	if err != nil {
-		addMessage(err.Error())
+		logging.AddMessage(err.Error())
 	}
-	writeLog()
+	logging.WriteLog()
 
 	if err != nil {
 		os.Exit(1)
@@ -30,23 +37,23 @@ func main() {
 }
 
 func execute() error {
-	addMessage("********************************")
-	addMessage("*** wsl-clock starting...")
-	addMessage("*** Version   : %s", version)
-	addMessage("*** Commit    : %s", commit)
-	addMessage("*** Date      : %s", date)
-	addMessage("*** Go version: %s", goversion)
+	logging.AddMessage("********************************")
+	logging.AddMessage("*** wsl-clock starting...")
+	logging.AddMessage("*** Version   : %s", version)
+	logging.AddMessage("*** Commit    : %s", commit)
+	logging.AddMessage("*** Date      : %s", date)
+	logging.AddMessage("*** Go version: %s", goversion)
 
-	runningDistros, err := getRunningDistros()
+	runningDistros, err := wsl.GetRunningDistros()
 	if err != nil {
 		return fmt.Errorf("Failed to get running distros: %s", err)
 	}
 	if len(runningDistros) == 0 {
-		addMessage("No running distros - quitting")
+		logging.AddMessage("No running distros - quitting")
 		return nil
 	}
 
-	originalTime, err := getWslTime()
+	originalTime, err := wsl.GetWslTime()
 	if err != nil {
 		return fmt.Errorf("Failed to get original time: %s", err)
 	}
@@ -56,21 +63,21 @@ func execute() error {
 	absDiffSeconds := math.Abs(diff.Seconds())
 
 	if absDiffSeconds < toleratedTimeDiffInSeconds {
-		addMessage("Time diff (%0.fs) within tolerance (%0.fs) - quitting", absDiffSeconds, toleratedTimeDiffInSeconds)
+		logging.AddMessage("Time diff (%0.fs) within tolerance (%0.fs) - quitting", absDiffSeconds, toleratedTimeDiffInSeconds)
 		return nil
 	}
 
-	err = resetWslClock()
+	err = wsl.ResetWslClock()
 	if err != nil {
 		return err
 	}
 
-	newTime, err := getWslTime()
+	newTime, err := wsl.GetWslTime()
 	if err != nil {
 		return fmt.Errorf("Failed to get new time: %s", err)
 	}
 
-	addMessage("Time correction (seconds): %.0f", newTime.Sub(originalTime).Seconds())
+	logging.AddMessage("Time correction (seconds): %.0f", newTime.Sub(originalTime).Seconds())
 
 	return nil
 }

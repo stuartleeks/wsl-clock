@@ -1,14 +1,17 @@
-package main
+// +build windows
+
+package wsl
 
 import (
 	"bufio"
 	"bytes"
 	"fmt"
 	"os/exec"
+	"syscall"
 	"time"
 )
 
-func getRunningDistros() ([]string, error) {
+func GetRunningDistros() ([]string, error) {
 	// TODO - consider changing this to us verbose listing and test for any running v2 instances
 	// and then use that to determine an instance to run the remaining WSL commands in
 	output, err := execCmdToLines("wsl.exe", "--list", "--running", "--quiet")
@@ -17,7 +20,7 @@ func getRunningDistros() ([]string, error) {
 	}
 	return output, nil
 }
-func getWslTime() (time.Time, error) {
+func GetWslTime() (time.Time, error) {
 	output, err := execCmdToLines("wsl.exe", "sh", "-c", "date -Iseconds")
 	if err != nil {
 		return time.Time{}, fmt.Errorf("Failed to call WSL to get current time: %s", err)
@@ -31,7 +34,7 @@ func getWslTime() (time.Time, error) {
 
 	return timeValue, nil
 }
-func resetWslClock() error {
+func ResetWslClock() error {
 	_, err := execCmdToLines("wsl.exe", "-u", "root", "sh", "-c", "hwclock -s")
 	if err != nil {
 		return fmt.Errorf("Failed to call WSL to reset clock: %s", err)
@@ -41,6 +44,13 @@ func resetWslClock() error {
 
 func execCmdToLines(program string, arg ...string) ([]string, error) {
 	cmd := exec.Command(program, arg...)
+
+	const CREATE_NO_WINDOW = 0x08000000
+	sysAttr := syscall.SysProcAttr{}
+	sysAttr.CreationFlags = CREATE_NO_WINDOW
+	sysAttr.HideWindow = true
+	cmd.SysProcAttr = &sysAttr
+
 	outputTemp, err := cmd.Output()
 	if err != nil {
 		return []string{}, err

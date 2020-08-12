@@ -1,4 +1,4 @@
-package main
+package logging
 
 import (
 	"fmt"
@@ -11,14 +11,14 @@ var message string
 
 const maxLogFileSize int64 = 5 * 1024 * 1024
 
-func addMessage(newMessage string, a ...interface{}) {
+func AddMessage(newMessage string, a ...interface{}) {
 	if message != "" {
 		message += "\n"
 	}
 	timestamp := time.Now().UTC().Format("2006-01-02 15:04:05 ")
 	message += timestamp + fmt.Sprintf(newMessage, a...)
 }
-func writeLog() {
+func WriteLog() {
 	userProfile := os.Getenv("USERPROFILE")
 	logPath := filepath.Join(userProfile, ".wsl-clock.log")
 	backupLogPath := filepath.Join(userProfile, ".wsl-clock.old.log")
