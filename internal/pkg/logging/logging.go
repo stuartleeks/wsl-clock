@@ -56,7 +56,10 @@ func handleLogFileRotation(logPath string, backupLogPath string) {
 		} else {
 			os.Remove(backupLogPath)
 		}
-		os.Rename(logPath, backupLogPath)
+		if err = os.Rename(logPath, backupLogPath); err != nil {
+			fmt.Printf("Error renaming log to backup %q: %s", backupLogPath, err)
+			panic(err)
+		}
 	}
 }
 
