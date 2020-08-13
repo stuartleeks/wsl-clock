@@ -8,7 +8,7 @@ This repo has a workaround that creates a scheduled task that is triggered by Wi
 
 For the background to this repo, see [this blog post](https://stuartleeks.com/posts/fixing-clock-skew-with-wsl-2/). The implementation discussed in that blog post is based on PowerShell and that implementation is still available [here](https://github.com/stuartleeks/wsl-clock/tree/powershell). The implementation has now been replaced with a program written in Go, with the following advantages:
 
-* The appliation runs as a windowless app so there is no longer the flash of a powershell window when the task runs
+* The application runs as a windowless app so there is no longer the flash of a powershell window when the task runs
 * The logic has been updated to test for a running WSL v2 distro before checking whether to reset the clock (rather than _any_ running distro). This removes the potential for spinning up a WSL 2 distro when there wasn't one running (i.e. when there was no need to reset the clock)
 * The logic now uses an existing running distro for executing the time checks and reset steps, rather than the default distro. This avoids situations where an extra distro may have been started, as well as avoiding issues when the default distro was configured as WSL v1
 
