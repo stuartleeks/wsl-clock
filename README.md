@@ -14,7 +14,9 @@ For the background to this repo, see [this blog post](https://stuartleeks.com/po
 
 ## Setup
 
-To set up the scheduled task, clone the repo and run `add-wslclocktask.ps1`.
+Download the ZIP file for a [prebuilt release](https://github.com/stuartleeks/wsl-clock/releases/latest) and unzip to a local folder.
+
+To set up the scheduled task, run `add-wslclocktask.ps1` in the content you just unzipped. This will set up a scheduled task triggered on Hibernation Resume events to run the `wsl-clock.exe` to check for clock drift on resuming from hibernation.
 
 ## Cleanup
 
@@ -23,3 +25,8 @@ To remove the scheduled task, run `remove-wslclocktask.ps1`
 ## Logs/Troubleshooting
 
 The program invoked by the scheduled task logs output to `~/.wsl-clock.log`
+
+## Building from source
+
+The simplest way to build from source is to use [Visual Studio Code](https://code.visualstudio.com) and open as a [devcontainer](https://code.visualstudio.com/docs/remote/containers). This will run the development environment with the required version of Go and allow you to run `make build` to build the binary.
+
