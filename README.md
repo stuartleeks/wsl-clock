@@ -16,6 +16,10 @@ For the background to this repo, see [this blog post](https://stuartleeks.com/po
 
 Download the ZIP file for a [prebuilt release](https://github.com/stuartleeks/wsl-clock/releases/latest) and unzip to a local folder.
 
+After unzipping, unblock each to the `.ps1` and `.exe` files by right-clicking, selecting 'Properties', ticking 'Unblock' and clicking 'OK':
+
+![](docs/unblock.png)
+
 To set up the scheduled task, run `add-wslclocktask.ps1` in the content you just unzipped. This will set up a scheduled task triggered on Hibernation Resume events to run the `wsl-clock.exe` to check for clock drift on resuming from hibernation.
 
 ## Cleanup
