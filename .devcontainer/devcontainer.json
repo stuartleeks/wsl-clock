@@ -19,9 +19,7 @@
 		// Mount docker socket for docker builds
 		"-v", "/var/run/docker.sock:/var/run/docker.sock",
 		// Use host network
-		"--network=host",
-		// Mount azure, git and docker config
-		"-v", "${env:HOME}${env:USERPROFILE}/.azure:/root/.azure"
+		"--network=host"
 	],
 
 	// Set *default* container specific settings.json values on container create.
